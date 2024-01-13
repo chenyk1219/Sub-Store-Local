@@ -39,14 +39,14 @@ jobs:
           pnpm run bundle
       - name:  Package Release
         run: |
-          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t linux-node16 --out-path  ./linux
-      - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-            name: sub-store-linux
-            path: linux/
+          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t linux-node16 --out-path  ./sub-store-linux
+      # - name: Upload
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #       name: sub-store-linux
+      #       path: linux/
       - name: Package Release
-        run: tar czf sub-store-linux.tar.gz sub-store-linux
+        run: tar czf sub-store-linux.tar.gz ./sub-store-linux
       - name: Draft Release
         uses: softprops/action-gh-release@v1
         with:
@@ -101,14 +101,14 @@ jobs:
           pnpm run bundle
       - name:  Package Release
         run: |
-          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t macos-node16 --out-path ./macos
-      - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-            name: sub-store-macos
-            path: macos/
+          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t macos-node16 --out-path ./sub-store-macos
+      # - name: Upload
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #       name: sub-store-macos
+      #       path: macos/
       - name: Package Release
-        run: tar czf sub-store-linux.tar.gz sub-store-macos
+        run: tar czf sub-store-macos.tar.gz ./sub-store-macos
       - name: Draft Release
         uses: softprops/action-gh-release@v1
         with:
