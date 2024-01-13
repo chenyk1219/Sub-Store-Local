@@ -17,15 +17,15 @@ jobs:
         run: |
           npm install -g pnpm
           npm install -g pkg
-          cd backend && pnpm i
+          cd Sub-Store/backend && pnpm i
       - name: Build
         run: |
-          cd backend
+          cd Sub-Store/backend
           pnpm run build
       - name: Bundle
         run: |
-          cd backend
+          cd Sub-Store/backend
           pnpm run bundle
       - name:  Package Release
         run: |
-          pkg ./backend/dist/sub-store.bundle.js -t linux-node16-x86
+          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t linux-node16-x86
