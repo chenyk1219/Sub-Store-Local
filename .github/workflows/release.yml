@@ -4,10 +4,7 @@ on:
 jobs:
   windows_build:
     name: Windows Build
-    runs-on: windows-latest
-    defaults:
-      run:
-        shell: msys2 {0}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-python@v4
         with:
@@ -15,30 +12,30 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - uses: msys2/setup-msys2@v2
-        with:
-          update: true
-          install: base-devel git mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-pcre2 patch
-          msystem: MINGW64
-          path-type: inherit
       - name: Checkout
-        run:
+        run: |
+          wudo apt install git wget -y
           git clone https://github.com/sub-store-org/Sub-Store.git
-      - name: Install dependencies
-        run: |
-          npm install -g pnpm
-          npm install -g pkg
-          cd Sub-Store/backend && pnpm i
-      - name: Build
-        run: |
-          cd Sub-Store/backend
-          dir
-          pnpm run build
-      - name: Bundle
-        run: |
-          cd Sub-Store/backend
-          pnpm run bundle
+          wget https://github.com/sub-store-org/Sub-Store/releases/download/2.14.154/sub-store.bundle.js
       - name:  Package Release
         run: |
-          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t macos-node16-x86
-          ls -l ./Sub-Store/backend/dist/
+            pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t macos-node16-x86
+            ls -l 
+      # - name: Install dependencies
+      #   run: |
+      #     npm install -g pnpm
+      #     npm install -g pkg
+      #     cd Sub-Store/backend && pnpm i
+      # - name: Build
+      #   run: |
+      #     cd Sub-Store/backend
+      #     dir
+      #     pnpm run build
+      # - name: Bundle
+      #   run: |
+      #     cd Sub-Store/backend
+      #     pnpm run bundle
+      # - name:  Package Release
+      #   run: |
+      #     pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t macos-node16-x86
+      #     ls -l ./Sub-Store/backend/dist/
