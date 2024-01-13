@@ -2,8 +2,8 @@ name: build
 on:
     workflow_dispatch:
 jobs:
-  windows_build:
-    name: Windows Build
+  linux_build:
+    name: Linux Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-python@v4
@@ -16,30 +16,21 @@ jobs:
         run: |
           sudo apt install git wget -y
           git clone https://github.com/sub-store-org/Sub-Store.git
-          wget https://github.com/sub-store-org/Sub-Store/releases/download/2.14.154/sub-store.bundle.js
+      - name: Install dependencies
+        run: |
+          npm install -g pnpm
+          npm install -g pkg
+          cd Sub-Store/backend && pnpm i
+      - name: Build
+        run: |
+          cd Sub-Store/backend
+          dir
+          pnpm run build
+      - name: Bundle
+        run: |
+          cd Sub-Store/backend
+          pnpm run bundle
       - name:  Package Release
         run: |
-            # npm config set cache "./cache"
-            # npm config set prefix "./prefix"
-            npm install pkg -g
-            # export PKG_CACHE_PATH="./cache"
-            pkg ./sub-store.bundle.js -t linux-node16
-            ls -l 
-      # - name: Install dependencies
-      #   run: |
-      #     npm install -g pnpm
-      #     npm install -g pkg
-      #     cd Sub-Store/backend && pnpm i
-      # - name: Build
-      #   run: |
-      #     cd Sub-Store/backend
-      #     dir
-      #     pnpm run build
-      # - name: Bundle
-      #   run: |
-      #     cd Sub-Store/backend
-      #     pnpm run bundle
-      # - name:  Package Release
-      #   run: |
-      #     pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t linux-node16-x86
-      #     ls -l ./Sub-Store/backend/dist/
+          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t linux-node16 -out ./linux
+          ls -l ./linux
