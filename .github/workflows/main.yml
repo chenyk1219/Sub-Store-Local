@@ -6,6 +6,9 @@ jobs:
     name: macOS Build
     runs-on: macos-latest
     steps:
+      - name: Set Tools
+        run: 
+            brew install openssl@3
       - name: Checkout
         run: |
           brew install git
