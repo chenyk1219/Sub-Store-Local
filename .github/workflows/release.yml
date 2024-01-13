@@ -32,5 +32,47 @@ jobs:
           pnpm run bundle
       - name:  Package Release
         run: |
-          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t linux-node16 -out ./linux
+          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t linux-node16 --out-path  ./linux
           ls -l ./linux
+          
+  macos_build:
+    name: macOS Build
+    runs-on: macos-latest
+    steps:
+      - name: Set Tools
+        run: |
+            brew install openssl@3
+            ls /usr/local/opt/openssl@3
+            echo 'export PATH="/usr/local/opt/openssl@3/bin:$PATH"' >> /Users/runner/.bash_profile
+            echo 'export LDFLAGS="-L/usr/local/opt/openssl@3/lib $LDFLAGS"'  >> /Users/runner/.bash_profile
+            echo 'export CPPFLAGS="-I/usr/local/opt/openssl@3/include CPPFLAGS"' >> /Users/runner/.bash_profile
+      - name: Checkout
+        run: |
+          brew install git
+          git clone https://github.com/sub-store-org/Sub-Store.git
+      - name: Set up Node.js
+        run: |
+            brew install node@16
+            echo 'export PATH="/usr/local/opt/node@16/bin:$PATH"' >> /Users/runner/.bash_profile
+            echo 'export LDFLAGS="-L/usr/local/opt/node@16/lib $LDFLAGS"'  >> /Users/runner/.bash_profile
+            echo 'export CPPFLAGS="-I/usr/local/opt/node@16/include $CPPFLAGS"' >> /Users/runner/.bash_profile
+      - uses: actions/setup-python@v4
+        with:
+            python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          npm install -g pnpm
+          npm install -g pkg
+          cd Sub-Store/backend && pnpm i
+      - name: Build
+        run: |
+          cd Sub-Store/backend
+          pnpm run build
+      - name: Bundle
+        run: |
+          cd Sub-Store/backend
+          pnpm run bundle
+      - name:  Package Release
+        run: |
+          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t macos-node16 --out-path ./macos
+          ls -l ./macos
