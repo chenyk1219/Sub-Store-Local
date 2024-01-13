@@ -19,10 +19,10 @@ jobs:
           wget https://github.com/sub-store-org/Sub-Store/releases/download/2.14.154/sub-store.bundle.js
       - name:  Package Release
         run: |
-            npm config set cache "./cache"
-            npm config set prefix "./prefix"
+            # npm config set cache "./cache"
+            # npm config set prefix "./prefix"
             npm install pkg -g
-            export PKG_CACHE_PATH="./cache"
+            # export PKG_CACHE_PATH="./cache"
             pkg ./sub-store.bundle.js -t linux-node16
             ls -l 
       # - name: Install dependencies
