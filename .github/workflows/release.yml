@@ -139,10 +139,8 @@ jobs:
         path-type: inherit
     - name: Checkout
       run: |
-          set -e
-          set sed="C:\Program Files\Git\usr\bin\sed.exe"
           git clone https://github.com/sub-store-org/Sub-Store.git
-          "C:\Program Files\Git\usr\bin\sed.exe" -i '' -e 's#https://sub-store.vercel.app/#http://0.0.0.0:3001#g' 'Sub-Store/backend/src/restful/miscs.js'
+          "C:\Program Files\Git\usr\bin\sed.exe" -i 's#https://sub-store.vercel.app/#http://0.0.0.0:3001#g' 'Sub-Store/backend/src/restful/miscs.js'
     - id: tag
       name: Generate release tag
       run: |
