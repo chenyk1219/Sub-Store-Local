@@ -16,6 +16,7 @@ jobs:
         run: |
           sudo apt install git wget -y
           git clone https://github.com/sub-store-org/Sub-Store.git
+          sed -i -e "s|https://sub-store.vercel.app/|http://0.0.0.0:3001" Sub-Store/backend/src/restful/miscs.js
       - name: Install dependencies
         run: |
           npm install -g pnpm
@@ -50,6 +51,7 @@ jobs:
         run: |
           brew install git
           git clone https://github.com/sub-store-org/Sub-Store.git
+          sed -i -e "s|https://sub-store.vercel.app/|http://0.0.0.0:3001" Sub-Store/backend/src/restful/miscs.js
       - name: Set up Node.js
         run: |
             brew install node@16
