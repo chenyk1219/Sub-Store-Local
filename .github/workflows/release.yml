@@ -1,18 +1,40 @@
-name: GitHub CI
-on: 
-  workflow_dispatch:
-
+name: build
+on:
+    workflow_dispatch:
 jobs:
-  macos:
-    name: Macos Build
-    runs-on: ubuntu-latest
+  windows_build:
+    name: Windows Build
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
     steps:
-      - name: Checkout
+      - uses: actions/setup-python@v4
+        with:
+         python-version: '3.10'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: base-devel git mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-pcre2 patch
+          msystem: MINGW64
+          path-type: inherit
+      - name: Install dependencies
         run: |
-          sudo apt install -y git
-          git clone https://github.com/sub-store-org/Sub-Store.git
+          npm install -g pnpm
+          npm install -g pkg
+          cd Sub-Store/backend && pnpm i
       - name: Build
-        run: docker run -it \
-            -e GENERATE_UNIQUE=true \
-            -e MASTER_PLIST_URL='https://raw.githubusercontent.com/sickcodes/osx-serial-generator/master/config-custom.plist' \
-            sickcodes/docker-osx:ventura /bin/zsh -c "brew install node@16"
+        run: |
+          cd Sub-Store/backend
+          pnpm run build
+      - name: Bundle
+        run: |
+          cd Sub-Store/backend
+          pnpm run bundle
+      - name:  Package Release
+        run: |
+          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t macos-node16-x86
+          ls -l ./Sub-Store/backend/dist/
