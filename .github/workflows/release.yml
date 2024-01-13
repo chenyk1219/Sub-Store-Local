@@ -127,7 +127,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.10'
     - uses: actions/setup-node@v3
       with:
         node-version: '16'
@@ -142,7 +142,7 @@ jobs:
           set -e
           set sed="C:\Program Files\Git\usr\bin\sed.exe"
           git clone https://github.com/sub-store-org/Sub-Store.git
-          %sed% -i '' -e 's#https://sub-store.vercel.app/#http://0.0.0.0:3001#g' 'Sub-Store/backend/src/restful/miscs.js'
+          "C:\Program Files\Git\usr\bin\sed.exe" -i '' -e 's#https://sub-store.vercel.app/#http://0.0.0.0:3001#g' 'Sub-Store/backend/src/restful/miscs.js'
     - id: tag
       name: Generate release tag
       run: |
