@@ -1,0 +1,32 @@
+name: build
+on:
+    watch:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        run: |
+          apt add git
+          git clone https://github.com/sub-store-org/Sub-Store.git
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: Install dependencies
+        run: |
+          npm install -g pnpm
+          npm install -g pkg
+          cd backend && pnpm i
+      - name: Build
+        run: |
+          cd backend
+          pnpm run build
+      - name: Bundle
+        run: |
+          cd backend
+          pnpm run bundle
+      - name:  Package Release
+        run: |
+          pkg ./backend/dist/sub-store.bundle.js -t linux-node16-x86
