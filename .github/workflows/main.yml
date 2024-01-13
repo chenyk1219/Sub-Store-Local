@@ -9,6 +9,10 @@ jobs:
       - name: Set Tools
         run: 
             brew install openssl@3
+            ls -l /usr/local/opt/openssl@3
+            echo 'export PATH="/usr/local/opt/openssl@3/bin:$PATH"' >> /Users/runner/.bash_profile
+            echo 'export LDFLAGS="-L/usr/local/opt/openssl@3/lib $LDFLAGS"'  >> /Users/runner/.bash_profile
+            echo 'export CPPFLAGS="-I/usr/local/opt/openssl@3/include CPPFLAGS"' >> /Users/runner/.bash_profile
       - name: Checkout
         run: |
           brew install git
@@ -17,8 +21,8 @@ jobs:
         run: |
             brew install node@16
             echo 'export PATH="/usr/local/opt/node@16/bin:$PATH"' >> /Users/runner/.bash_profile
-            echo 'export LDFLAGS="-L/usr/local/opt/node@16/lib"'  >> /Users/runner/.bash_profile
-            echo 'export CPPFLAGS="-I/usr/local/opt/node@16/include"' >> /Users/runner/.bash_profile
+            echo 'export LDFLAGS="-L/usr/local/opt/node@16/lib $LDFLAGS"'  >> /Users/runner/.bash_profile
+            echo 'export CPPFLAGS="-I/usr/local/opt/node@16/include $CPPFLAGS"' >> /Users/runner/.bash_profile
       - uses: actions/setup-python@v4
         with:
             python-version: '3.10'
