@@ -9,7 +9,6 @@ jobs:
       - name: Set Tools
         run: 
             brew install openssl@3
-            ls -l /usr/local/opt/openssl@3
             echo 'export PATH="/usr/local/opt/openssl@3/bin:$PATH"' >> /Users/runner/.bash_profile
             echo 'export LDFLAGS="-L/usr/local/opt/openssl@3/lib $LDFLAGS"'  >> /Users/runner/.bash_profile
             echo 'export CPPFLAGS="-I/usr/local/opt/openssl@3/include CPPFLAGS"' >> /Users/runner/.bash_profile
