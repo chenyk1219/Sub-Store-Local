@@ -18,7 +18,7 @@ jobs:
         run: |
           sudo apt install git wget -y
           git clone https://github.com/sub-store-org/Sub-Store.git
-          sed -i 's#https://sub-store.vercel.app/#http://0.0.0.0:3001#g' 'Sub-Store/backend/src/restful/miscs.js'
+          sed -i '' -e 's#https://sub-store.vercel.app/#http://0.0.0.0:3001#g' 'Sub-Store/backend/src/restful/miscs.js'
       - id: tag
         name: Generate release tag
         run: |
