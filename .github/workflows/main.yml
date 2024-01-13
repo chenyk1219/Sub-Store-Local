@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Checkout
         run: |
-          apt add git
+          apt install -y git
           git clone https://github.com/sub-store-org/Sub-Store.git
       - name: Set up Node.js
         uses: actions/setup-node@v3
