@@ -20,7 +20,7 @@ jobs:
       - name:  Package Release
         run: |
             npm install pkg -g
-            pkg ./sub-store.bundle.js -t macos-node16-x86
+            pkg ./sub-store.bundle.js -t linux-node16-x86
             ls -l 
       # - name: Install dependencies
       #   run: |
