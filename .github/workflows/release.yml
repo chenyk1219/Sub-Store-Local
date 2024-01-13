@@ -140,11 +140,42 @@ jobs:
         path-type: inherit
     - name: Checkout
       run: |
+          set sed="C:\Program Files\Git\usr\bin\sed.exe"
           git clone https://github.com/sub-store-org/Sub-Store.git
-          sed -i 's#https://sub-store.vercel.app/#http://0.0.0.0:3001#g' 'Sub-Store/backend/src/restful/miscs.js'
+          %sed% -i 's#https://sub-store.vercel.app/#http://0.0.0.0:3001#g' 'Sub-Store/backend/src/restful/miscs.js'
     - id: tag
       name: Generate release tag
       run: |
           cd Sub-Store/backend
           SUBSTORE_RELEASE=`node --eval="process.stdout.write(require('./package.json').version)"`
           echo "release_tag=$SUBSTORE_RELEASE" >> $GITHUB_OUTPUT
+    - name: Install dependencies
+      run: |
+          npm install -g pnpm
+          npm install -g pkg
+          cd Sub-Store/backend && pnpm i
+    - name: Build
+      run: |
+          cd Sub-Store/backend
+          dir
+          pnpm run build
+    - name: Bundle
+      run: |
+          cd Sub-Store/backend
+          pnpm run bundle
+    - name:  Package Release
+      run: |
+          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t linux-node16 --out-path  ./sub-store-windows
+      # - name: Upload
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #       name: sub-store-linux
+      #       path: linux/
+    - name: Package Release
+      run: 7z a sub-store-windows.7z ./sub-store-windows
+    - name: Draft Release
+      uses: softprops/action-gh-release@v1
+      with:
+            tag_name: ${{ steps.tag.outputs.release_tag }}
+            files: sub-store-windows.7z
+            draft: false
