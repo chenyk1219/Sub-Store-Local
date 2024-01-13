@@ -11,8 +11,9 @@ jobs:
           brew install git
           git clone https://github.com/sub-store-org/Sub-Store.git
       - name: Set up Node.js
-        run: 
+        run: |
             brew install node@16
+            echo 'export PATH="/usr/local/opt/node@16/bin:$PATH"' >> /Users/runner/.bash_profile
       - uses: actions/setup-python@v4
         with:
             python-version: '3.10'
