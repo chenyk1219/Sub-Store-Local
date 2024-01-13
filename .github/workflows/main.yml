@@ -2,7 +2,8 @@ name: build
 on:
     workflow_dispatch:
 jobs:
-  build:
+  macos_build:
+    name: macOS Build
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -27,4 +28,5 @@ jobs:
           pnpm run bundle
       - name:  Package Release
         run: |
-          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t linux-node16-x86
+          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t macos-node16-x86
+          ls -l ./Sub-Store/backend/dist/
