@@ -1,9 +1,8 @@
 name: build
 on:
     workflow_dispatch:
-concurrency:
-  group: ${{ github.ref }}-${{ github.workflow }}
-  cancel-in-progress: true
+permissions:
+  contents: write
 jobs:
   linux_build:
     name: Linux Build
