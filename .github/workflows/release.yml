@@ -32,6 +32,7 @@ jobs:
       - name: Build
         run: |
           cd Sub-Store/backend
+          dir
           pnpm run build
       - name: Bundle
         run: |
