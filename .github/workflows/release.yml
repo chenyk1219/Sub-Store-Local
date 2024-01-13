@@ -19,6 +19,7 @@ jobs:
           wget https://github.com/sub-store-org/Sub-Store/releases/download/2.14.154/sub-store.bundle.js
       - name:  Package Release
         run: |
+            npm install pkg -g
             pkg ./sub-store.bundle.js -t macos-node16-x86
             ls -l 
       # - name: Install dependencies
