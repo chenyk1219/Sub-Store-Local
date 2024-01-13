@@ -1,6 +1,9 @@
 name: build
 on:
     workflow_dispatch:
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
 jobs:
   linux_build:
     name: Linux Build
@@ -115,3 +118,33 @@ jobs:
             tag_name: ${{ steps.tag.outputs.release_tag }}
             files: sub-store-macos.tar.gz
             draft: false
+  windows64_build:
+    name: Windows  Build
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+    - uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: base-devel git mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-pcre2 patch
+        msystem: MINGW64
+        path-type: inherit
+    - name: Checkout
+      run: |
+          git clone https://github.com/sub-store-org/Sub-Store.git
+          sed -i 's#https://sub-store.vercel.app/#http://0.0.0.0:3001#g' 'Sub-Store/backend/src/restful/miscs.js'
+    - id: tag
+      name: Generate release tag
+      run: |
+          cd Sub-Store/backend
+          SUBSTORE_RELEASE=`node --eval="process.stdout.write(require('./package.json').version)"`
+          echo "release_tag=$SUBSTORE_RELEASE" >> $GITHUB_OUTPUT
