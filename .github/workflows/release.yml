@@ -42,11 +42,7 @@ jobs:
       - name:  Package Release
         run: |
           pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t linux-node16 --out-path  ./sub-store-linux
-      # - name: Upload
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #       name: sub-store-linux
-      #       path: linux/
+
       - name: Package Release
         run: tar czf sub-store-linux.tar.gz ./sub-store-linux
       - name: Draft Release
@@ -165,11 +161,6 @@ jobs:
     - name:  Package Release
       run: |
           pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t linux-node16 --out-path  ./sub-store-windows
-      # - name: Upload
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #       name: sub-store-linux
-      #       path: linux/
     - name: Package Release
       run: 7z a sub-store-windows.7z ./sub-store-windows
     - name: Draft Release
@@ -178,3 +169,45 @@ jobs:
             tag_name: ${{ steps.tag.outputs.release_tag }}
             files: sub-store-windows.7z
             draft: false
+  frontend_build:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Checkout
+        run: |
+          git clone https://github.com/sub-store-org/Sub-Store-Front-End.git
+          git clone https://github.com/sub-store-org/Sub-Store.git
+          sed -i 's#https://sub.store#http://0.0.0.0:3000#g' 'Sub-Store-Front-End/.env.production'
+      - id: frontend-tag
+        name: Generate frontend release tag
+        run: |
+          SUB_STORE_RELEASE=`node --eval="process.stdout.write(require('./package.json').version)"`
+          echo "frontend_release_tag=$SUB_STORE_RELEASE" >> $GITHUB_OUTPUT
+      - id: tag
+        name: Generate release tag
+        run: |
+          cd Sub-Store/backend
+          SUBSTORE_RELEASE=`node --eval="process.stdout.write(require('./package.json').version)"`
+          echo "release_tag=$SUBSTORE_RELEASE" >> $GITHUB_OUTPUT
+      - name: Install dependencies
+        run: |
+          cd Sub-Store-Front-End
+          npm install -g pnpm
+          pnpm i
+      - name: build
+        run: |
+          cd Sub-Store-Front-End
+          pnpm build
+      - name: Package Release
+        run: |
+          cd Sub-Store-Front-End
+          zip -r dist-${{steps.frontend-tag.outputs.frontend_release_tag}}.zip dist
+      - name: Draft Release
+        uses: softprops/action-gh-release@v1
+        with:
+              tag_name: ${{ steps.tag.outputs.release_tag }}
+              files: Sub-Store-Front-End/dist-${{steps.frontend-tag.outputs.frontend_release_tag}}.zip
+              draft: false
