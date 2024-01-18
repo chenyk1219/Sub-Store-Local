@@ -184,6 +184,7 @@ jobs:
       - id: frontend-tag
         name: Generate frontend release tag
         run: |
+          cd Sub-Store-Front-End
           SUB_STORE_RELEASE=`node --eval="process.stdout.write(require('./package.json').version)"`
           echo "frontend_release_tag=$SUB_STORE_RELEASE" >> $GITHUB_OUTPUT
       - id: tag
