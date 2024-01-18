@@ -223,9 +223,11 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt install wget -y
           python -m pip install --upgrade pip
           pip install httpx 
 
       - name: Update Telegraph
         run: |
-          python https://raw.githubusercontent.com/chenyk1219/Sub-Store-Front-End/main/telegram_update.py ${{ secrets.TELEGRAPH_TOKEN }} ${{steps.frontend-tag.outputs.frontend_release_tag}} ${{ steps.tag.outputs.release_tag }}
+          wget https://raw.githubusercontent.com/chenyk1219/Sub-Store-Local/main/telegram_update.py
+          python telegram_update.py ${{ secrets.TELEGRAPH_TOKEN }} ${{steps.frontend-tag.outputs.frontend_release_tag}} ${{ steps.tag.outputs.release_tag }}

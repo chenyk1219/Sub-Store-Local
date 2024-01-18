@@ -6,24 +6,6 @@ from httpx import get, post
 token = str(sys.argv[1])
 frontend = str(sys.argv[2])
 backend = str(sys.argv[3])
-# main = get(
-#     "https://api.github.com/repos/chenyk1219/Sub-Store-Local/commits/main"
-# ).json()
-# text = (
-#     (
-#         (
-#             (
-#                 "#更新日志 #Sub-store 前端+后端 本地化部署 #"
-#                 + main["commit"]["author"]["name"].replace("_", "")
-#                 + " \n\n🔨 ["
-#                 + main["sha"][:7]
-#             )
-#             + "](https://github.com/chenyk1219/surge/commits/"
-#         )
-#         + main["sha"]
-#     )
-#     + "): "
-# ) + main["commit"]["message"]
 
 text = (f"#更新日志 #Sub-store 前端+后端 本地化部署\n"
         f"🔨前端版本：{frontend}，后端版本：{backend}\n"
