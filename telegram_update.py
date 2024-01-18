@@ -10,7 +10,8 @@ backend = str(sys.argv[3])
 text = ("#更新日志 #Sub-store 前端+后端 本地化部署\n"
         f"🔨前端版本：{frontend}，后端版本：{backend}\n"
         "本仓库地址：https://github.com/chenyk1219/Sub-Store-Local\n"
-        "源码仓库地址：https://github.com/sub-store-org/")
+        "源码仓库地址：https://github.com/sub-store-org\n"
+        "Sub-Store服务器版部署教程：https://www.inextops.com/tools/substore/\n")
 
 url = f"https://api.telegram.org/bot{token}/sendMessage"
 for cid in ["-1002083747718"]:
