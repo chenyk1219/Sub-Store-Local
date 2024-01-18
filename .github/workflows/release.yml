@@ -113,62 +113,62 @@ jobs:
             tag_name: ${{ steps.tag.outputs.release_tag }}
             files: sub-store-macos.tar.gz
             draft: false
-  windows64_build:
-    name: Windows  Build
-    runs-on: windows-latest
-    defaults:
-      run:
-        shell: msys2 {0}
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    - uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-    - uses: msys2/setup-msys2@v2
-      with:
-        update: true
-        install: base-devel git mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-pcre2 patch sed
-        msystem: MINGW64
-        path-type: inherit
-    - name: Checkout
-      run: |
-          git clone https://github.com/sub-store-org/Sub-Store.git
-          "C:\Program Files\Git\usr\bin\sed.exe" -i 's#https://sub-store.vercel.app/#http://0.0.0.0:3000#g' 'Sub-Store/backend/src/restful/miscs.js'
-          "C:\Program Files\Git\usr\bin\sed.exe" -i 's#src#./src#g' 'Sub-Store/backend/jsconfig.json'
-    - id: tag
-      name: Generate release tag
-      run: |
-          cd Sub-Store/backend
-          SUBSTORE_RELEASE=`node --eval="process.stdout.write(require('./package.json').version)"`
-          echo "release_tag=$SUBSTORE_RELEASE" >> $GITHUB_OUTPUT
-    - name: Install dependencies
-      run: |
-          npm install -g pnpm
-          npm install -g pkg
-          cd Sub-Store/backend && pnpm i
-    - name: Build
-      run: |
-          cd Sub-Store/backend
-          dir
-          pnpm run build
-    - name: Bundle
-      run: |
-          cd Sub-Store/backend
-          pnpm run bundle
-    - name:  Package Release
-      run: |
-          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t linux-node16 --out-path  ./sub-store-windows
-    - name: Package Release
-      run: 7z a sub-store-windows.7z ./sub-store-windows
-    - name: Draft Release
-      uses: softprops/action-gh-release@v1
-      with:
-            tag_name: ${{ steps.tag.outputs.release_tag }}
-            files: sub-store-windows.7z
-            draft: false
+#  windows64_build:
+#    name: Windows  Build
+#    runs-on: windows-latest
+#    defaults:
+#      run:
+#        shell: msys2 {0}
+#    steps:
+#    - uses: actions/checkout@v3
+#    - uses: actions/setup-python@v4
+#      with:
+#        python-version: '3.10'
+#    - uses: actions/setup-node@v3
+#      with:
+#        node-version: '16'
+#    - uses: msys2/setup-msys2@v2
+#      with:
+#        update: true
+#        install: base-devel git mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-pcre2 patch sed
+#        msystem: MINGW64
+#        path-type: inherit
+#    - name: Checkout
+#      run: |
+#          git clone https://github.com/sub-store-org/Sub-Store.git
+#          "C:\Program Files\Git\usr\bin\sed.exe" -i 's#https://sub-store.vercel.app/#http://0.0.0.0:3000#g' 'Sub-Store/backend/src/restful/miscs.js'
+#          "C:\Program Files\Git\usr\bin\sed.exe" -i 's#src#./src#g' 'Sub-Store/backend/jsconfig.json'
+#    - id: tag
+#      name: Generate release tag
+#      run: |
+#          cd Sub-Store/backend
+#          SUBSTORE_RELEASE=`node --eval="process.stdout.write(require('./package.json').version)"`
+#          echo "release_tag=$SUBSTORE_RELEASE" >> $GITHUB_OUTPUT
+#    - name: Install dependencies
+#      run: |
+#          npm install -g pnpm
+#          npm install -g pkg
+#          cd Sub-Store/backend && pnpm i
+#    - name: Build
+#      run: |
+#          cd Sub-Store/backend
+#          dir
+#          pnpm run build
+#    - name: Bundle
+#      run: |
+#          cd Sub-Store/backend
+#          pnpm run bundle
+#    - name:  Package Release
+#      run: |
+#          pkg ./Sub-Store/backend/dist/sub-store.bundle.js -t linux-node16 --out-path  ./sub-store-windows
+#    - name: Package Release
+#      run: 7z a sub-store-windows.7z ./sub-store-windows
+#    - name: Draft Release
+#      uses: softprops/action-gh-release@v1
+#      with:
+#            tag_name: ${{ steps.tag.outputs.release_tag }}
+#            files: sub-store-windows.7z
+#            draft: false
   frontend_build:
     name: Frontend Build
     runs-on: ubuntu-latest
