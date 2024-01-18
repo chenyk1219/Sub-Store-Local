@@ -209,11 +209,14 @@ jobs:
         run: |
           cd Sub-Store-Front-End
           zip -r dist-${{steps.frontend-tag.outputs.frontend_release_tag}}.zip dist
+          tar czf dist.tar.gz dist
       - name: Draft Release
         uses: softprops/action-gh-release@v1
         with:
               tag_name: ${{ steps.tag.outputs.release_tag }}
-              files: Sub-Store-Front-End/dist-${{steps.frontend-tag.outputs.frontend_release_tag}}.zip
+              files: ｜
+                  Sub-Store-Front-End/dist-${{steps.frontend-tag.outputs.frontend_release_tag}}.zip
+                  Sub-Store-Front-End/dist.tar.gz
               draft: false
 
       - name: Set up Python 3.9
